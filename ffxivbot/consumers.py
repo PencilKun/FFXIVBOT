@@ -221,7 +221,7 @@ class WSConsumer(AsyncWebsocketConsumer):
                     #         priority += 1
                     # except BaseException:
                     #     traceback.print_exc()
-                    match_prefix = ["/", "\\", "[CQ:at,qq={}]".format(self_id)]
+                    match_prefix = ["/", "\\", "、", "[CQ:at,qq={}]".format(self_id)]
                     push_to_mq = any(
                         [receive["message"].startswith(x) for x in match_prefix]
                     )
@@ -243,6 +243,9 @@ class WSConsumer(AsyncWebsocketConsumer):
                             push_to_mq = False
                             if receive["message"].startswith("/group"):
                                 push_to_mq = True
+                        group_cr = CustomReply.objects.filter(group=group_id,key=receive["message"].strip())
+                        if group_cr:
+                            push_to_mq = True
                     if push_to_mq:
                         receive["consumer_time"] = time.time()
                         text_data = json.dumps(receive)
@@ -287,10 +290,12 @@ class WSConsumer(AsyncWebsocketConsumer):
                 if echo.find("get_group_list") == 0:
                     self.bot.group_list = json.dumps(receive["data"])
                     self.bot.save(update_fields=["group_list"])
-                if echo.find("_get_friend_list") == 0:
+                if echo.find("get_friend_list") == 0:
                     self.bot.friend_list = json.dumps(receive["data"])
                     self.bot.save(update_fields=["friend_list"])
                 if echo.find("get_version_info") == 0:
+                    if "jre" in receive["data"]["coolq_directory"]:
+                        receive["data"]["coolq_edition"] = "pro"
                     self.bot.version_info = json.dumps(receive["data"])
                     self.bot.save(update_fields=["version_info"])
                 if echo.find("get_status") == 0:

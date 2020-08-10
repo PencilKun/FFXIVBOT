@@ -660,6 +660,8 @@ class PikaConsumer(object):
                 # Group Control Func
                 if receive["message"].find("\\") == 0:
                     receive["message"] = receive["message"].replace("\\", "/", 1)
+                if receive["message"].startswith("、"):
+                    receive["message"] = receive["message"].replace("、", "/", 1)
                 if receive["message_type"] == "discuss":
                     discuss_id = receive["discuss_id"]
                 if receive["message_type"] == "group":
@@ -831,15 +833,21 @@ class PikaConsumer(object):
 
                 if receive["message"].find("/help") == 0:
                     msg = ""
-                    for (k, v) in handlers.commands.items():
-                        command_enable = True
-                        if group and group_commands:
-                            command_enable = group_commands.get(k, "enable") == "enable"
-                        if command_enable:
-                            msg += "{}: {}\n".format(k, v)
-                    msg += "具体介绍详见Wiki使用手册: {}\n".format(
-                        "https://github.com/Bluefissure/FFXIVBOT/wiki/"
-                    )
+                    second_command_msg = receive["message"].replace("/help","",1).strip()
+                    second_command = second_command_msg.split(" ")[0].strip()
+                    if (second_command=="img"):
+                        for (k, v) in handlers.commands_img.items():
+                            msg += "{} : {}\n".format(k,v)
+                    elif (second_command=="other"):
+                        for (k, v) in handlers.commands_other.items():
+                            msg += "{} : {}\n".format(k,v)
+                    elif (not second_command):
+                        for (k, v) in handlers.commands_title.items():
+                            command_enable = True
+                            if group and group_commands:
+                                command_enable = group_commands.get(k, "enable") == "enable"
+                            if command_enable:
+                                msg += "{}: {}\n".format(k, v)
                     msg = msg.strip()
                     send_message(
                         bot,
