@@ -23,6 +23,10 @@ class EventHandler(object):
         if 0 < time.time() < user.ban_till:
             raise Exception("User {} get banned till {}".format(user_id, user.ban_till))
 
+        if receive["message"].startswith("\\"):
+            receive["message"] = receive["message"].replace("\\", "/", 1)
+        if receive["message"].startswith("、"):
+            receive["message"] = receive["message"].replace("、", "/", 1)
         # replace alter commands
         for (alter_command, command) in handlers.alter_commands.items():
             if receive["message"].startswith(alter_command):
@@ -35,8 +39,6 @@ class EventHandler(object):
         group = None
         group_created = False
         discuss_id = None
-        if receive["message"].startswith("\\"):
-            receive["message"] = receive["message"].replace("\\", "/", 1)
         if receive["message_type"] == "discuss":
             discuss_id = receive["discuss_id"]
 
@@ -167,17 +169,21 @@ class EventHandler(object):
         # Handle /help
         if receive["message"].startswith("/help"):
             msg = ""
-            for (k, v) in handlers.commands.items():
-                command_enable = True  # always True for private
-                if group and group_commands:
-                    command_enable = (
-                        group_commands.get(k, "enable") == "enable"
-                    )  # hide if disabled in group
-                if command_enable:
-                    msg += "{}: {}\n".format(k, v)
-            msg += "具体介绍详见Wiki使用手册: {}\n".format(
-                "https://github.com/Bluefissure/OtterBot/wiki"
-            )
+            second_command_msg = receive["message"].replace("/help","",1).strip()
+            second_command = second_command_msg.split(" ")[0].strip()
+            if (second_command=="img"):
+                for (k, v) in handlers.commands_img.items():
+                    msg += "{} : {}\n".format(k,v)
+            elif (second_command=="other"):
+                for (k, v) in handlers.commands_other.items():
+                    msg += "{} : {}\n".format(k,v)
+            elif (not second_command):
+                for (k, v) in handlers.commands_title.items():
+                    command_enable = True
+                    if group and group_commands:
+                        command_enable = group_commands.get(k, "enable") == "enable"
+                    if command_enable:
+                        msg += "{}: {}\n".format(k, v)
             msg = msg.strip()
             self.api_caller.send_message(
                 receive["message_type"],

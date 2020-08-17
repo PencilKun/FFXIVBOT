@@ -113,11 +113,6 @@ class WSConsumer(AsyncWebsocketConsumer):
                 return
             elif "CQHttp" in user_agent:
                 version = user_agent.replace("CQHttp/", "").split(".")
-                if version < "4.14.1".split("."):
-                    LOGGER.error(
-                        "Unsupport user_agent: {} for {}".format(user_agent, ws_self_id)
-                    )
-                    return
 
             bot = None
             # with transaction.atomic():
@@ -221,7 +216,7 @@ class WSConsumer(AsyncWebsocketConsumer):
                     #         priority += 1
                     # except BaseException:
                     #     traceback.print_exc()
-                    match_prefix = ["/", "\\", "[CQ:at,qq={}]".format(self_id)]
+                    match_prefix = ["/", "\\", "、", "[CQ:at,qq={}]".format(self_id)]
                     push_to_mq = any(
                         [receive["message"].startswith(x) for x in match_prefix]
                     )
@@ -243,6 +238,9 @@ class WSConsumer(AsyncWebsocketConsumer):
                             push_to_mq = False
                             if receive["message"].startswith("/group"):
                                 push_to_mq = True
+                        group_cr = CustomReply.objects.filter(group=group_id,key=receive["message"].strip())
+                        if group_cr:
+                            push_to_mq = True
                     if push_to_mq:
                         receive["consumer_time"] = time.time()
                         text_data = json.dumps(receive)
@@ -291,6 +289,8 @@ class WSConsumer(AsyncWebsocketConsumer):
                     self.bot.friend_list = json.dumps(receive["data"])
                     self.bot.save(update_fields=["friend_list"])
                 if "get_version_info" in echo:
+                    if "jre" in receive["data"]["coolq_directory"]:
+                        receive["data"]["coolq_edition"] = "pro"
                     self.bot.version_info = json.dumps(receive["data"])
                     self.bot.save(update_fields=["version_info"])
                 if "get_status" in echo:

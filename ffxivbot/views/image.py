@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from ffxivbot.models import *
 from .ren2res import ren2res
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 def image(req):
     if req.is_ajax() and req.method == "POST":
         res_dict = {"response": "No response."}

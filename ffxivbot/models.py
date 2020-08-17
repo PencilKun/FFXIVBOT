@@ -92,7 +92,7 @@ class QQGroup(models.Model):
     ban_till = models.BigIntegerField(default=0)
     last_reply_time = models.BigIntegerField(default=0)
     member_list = models.TextField(default="[]")
-    registered = models.BooleanField(default=False)
+    registered = models.BooleanField(default=True)
     subscription = models.ManyToManyField(
         WeiboUser, related_name="subscribed_by", blank=True
     )
@@ -107,7 +107,7 @@ class QQGroup(models.Model):
     server = models.ForeignKey(
         Server, on_delete=models.DO_NOTHING, blank=True, null=True
     )
-
+    milk = models.BooleanField(default=False)
     def __str__(self):
         return self.group_id
 
@@ -236,11 +236,11 @@ class QQBot(models.Model):
     long_query_interval = models.IntegerField(default=15)
     friend_list = models.TextField(default="{}")
     public = models.BooleanField(default=True)
-    r18 = models.BooleanField(default=False)
+    r18 = models.BooleanField(default=True)
     disconnections = models.TextField(default="[]")
     disconnect_time = models.BigIntegerField(default=0)
     command_stat = models.TextField(default="{}")
-    share_banned = models.BooleanField(default=False)
+    share_banned = models.BooleanField(default=True)
     img_banned = models.BooleanField(default=False)
 
     def __str__(self):
@@ -595,12 +595,13 @@ class TomonBot(models.Model):
     qqbot = models.ForeignKey(
         QQBot, related_name="tomon_bot", on_delete=models.CASCADE, blank=True, null=True
     )
+    tomonuser_id = models.CharField(max_length=32)
     username = models.CharField(max_length=32)
     password = models.CharField(max_length=32)
     token = models.CharField(max_length=256, blank=True)
     last_heartbeat = models.BigIntegerField(default=0)
     heartbeat_interval = models.BigIntegerField(default=0)
-
+    guild_id = models.TextField(default="{}")
     def auth(self, api_base="https://beta.tomon.co/api/v1"):
         auth_url = os.path.join(api_base, "auth/login")
         payload = {"full_name": self.username, "password": self.password}
@@ -608,6 +609,7 @@ class TomonBot(models.Model):
         if r.status_code == 200:
             res = r.json()
             self.token = res["token"]
+            self.tomonuser_id = res["id"]
             self.save()
         else:
             print("Error Response: {}\n{}".format(r.status_code, r.json()))

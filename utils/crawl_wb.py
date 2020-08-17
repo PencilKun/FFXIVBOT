@@ -30,7 +30,7 @@ logging.basicConfig(
                 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                 handlers = {
                         TimedRotatingFileHandler(
-                                        "log/crawl_wb.log",
+                                        "/home/FFXIVBOT/log/crawl_wb.log",
                                         when="D",
                                         backupCount = 10
                                     )
@@ -154,9 +154,7 @@ def crawl():
 
 if __name__ == "__main__":
     print("Crawling Weibo Service Start, check log file log/crawl_wb.log")
-    while True:
-        try:
-            crawl()
-        except BaseException:
-            logging.error("Error")
-        time.sleep(60)
+    try:
+        crawl()
+    except BaseException:
+        logging.error("Error")

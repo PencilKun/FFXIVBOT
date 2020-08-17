@@ -25,8 +25,11 @@ from django.db import connection, connections
 def del_bot(day=7):
     bots = QQBot.objects.filter(event_time__lt=time.time()-3600*24*day)
     for b in bots:
-        print("bot {} deleted".format(b))
-        b.delete()
+        if int(b.user_id) in [2413448390,2521641680]:
+            continue
+        else:
+            print("bot {} deleted".format(b))
+            b.delete()
 
 
 if __name__ == "__main__":
