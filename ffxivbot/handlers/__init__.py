@@ -135,3 +135,66 @@ alter_commands = {
   "/mitem":"/market item",
   "/海钓": "/ofish",
 }
+
+from .QQCommand_ofish import QQCommand_ofish
+from .QQCommand_cat import QQCommand_cat
+from .QQCommand_gakki import QQCommand_gakki
+from .QQCommand_10 import QQCommand_10
+from .QQCommand_bird import QQCommand_bird
+from .QQCommand_comment import QQCommand_comment
+from .QQCommand_search import QQCommand_search
+from .QQCommand_about import QQCommand_about
+from .QQCommand_donate import QQCommand_donate
+from .QQCommand_anime import QQCommand_anime
+from .QQCommand_gate import QQCommand_gate
+from .QQCommand_chp import QQCommand_chp
+from .QQCommand_random import QQCommand_random
+from .QQCommand_weather import QQCommand_weather
+from .QQCommand_gif import QQCommand_gif
+from .QQCommand_dps import QQCommand_dps
+from .QQCommand_dice import QQCommand_dice
+from .QQCommand_hso import QQCommand_hso
+from .QQCommand_raid import QQCommand_raid
+from .QQCommand_bot import QQCommand_bot
+from .QQCommand_pixiv import QQCommand_pixiv
+
+# from .QQCommand_music import QQCommand_music
+from .QQCommand_duilian import QQCommand_duilian
+from .QQCommand_image import QQCommand_image
+from .QQCommand_nuannuan import QQCommand_nuannuan
+from .QQCommand_tex import QQCommand_tex
+from .QQCommand_waifu import QQCommand_waifu
+from .QQCommand_quest import QQCommand_quest
+from .QQCommand_share import QQCommand_share
+from .QQCommand_trash import QQCommand_trash
+from .QQCommand_shorten import QQCommand_shorten
+from .QQCommand_ifttt import QQCommand_ifttt
+from .QQCommand_fsx import QQCommand_fsx
+
+# from .QQCommand_joke import QQCommand_joke
+from .QQCommand_mxh import QQCommand_mxh
+from .QQCommand_treasure import QQCommand_treasure
+from .QQCommand_hh import QQCommand_hh
+from .QQCommand_luck import QQCommand_luck
+from .QQCommand_abv import QQCommand_abv
+from .QQCommand_market import QQCommand_market
+
+from .arknights.QQCommand_akhr import QQCommand_akhr
+
+
+from .QQGroupCommand_group import QQGroupCommand_group
+from .QQGroupCommand_welcome import QQGroupCommand_welcome
+from .QQGroupCommand_custom_reply import QQGroupCommand_custom_reply
+from .QQGroupCommand_repeat_ban import QQGroupCommand_repeat_ban
+from .QQGroupCommand_repeat import QQGroupCommand_repeat
+from .QQGroupCommand_left_reply import QQGroupCommand_left_reply
+from .QQGroupCommand_ban import QQGroupCommand_ban
+from .QQGroupCommand_revenge import QQGroupCommand_revenge
+from .QQGroupCommand_vote import QQGroupCommand_vote
+from .QQGroupCommand_weibo import QQGroupCommand_weibo
+from .QQGroupCommand_live import QQGroupCommand_live
+from .QQGroupCommand_lottery import QQGroupCommand_lottery
+from .QQGroupCommand_command import QQGroupCommand_command
+from .QQGroupCommand_hunt import QQGroupCommand_hunt
+
+from .QQGroupChat import QQGroupChat
