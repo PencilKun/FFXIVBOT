@@ -46,6 +46,8 @@ def on_message(ws, message):
         print("Server >>> DISPATCH")
         try:
             print(json.dumps(msg, indent=4, sort_keys=True))
+            if msg["d"]["content"].startswith("、"):
+                msg["d"]["content"] = msg["d"]["content"].replace("、","/",1)
             if "content" not in msg["d"]:
                 return
             if not msg["d"]["content"].startswith("/"):
@@ -128,7 +130,8 @@ if __name__ == "__main__":
     while True:
         try:
             bot = TomonBot.objects.filter(username=sys.argv[1])[0]
-            bot.auth()
+            if sys.argv[1] != "Pencilss#1111":
+                bot.auth()
             bot.refresh_from_db()
             token = bot.token
             publisher = PikaPublisher()

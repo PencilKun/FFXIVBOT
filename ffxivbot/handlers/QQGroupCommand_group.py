@@ -70,8 +70,30 @@ def QQGroupCommand_group(*args, **kwargs):
             group.bots = json.dumps(group_bots)
             group.save(update_fields=["bots"])
             msg = "群机器人：{}".format(group_bots)
+        elif(second_command=="milk"):
+            interval = second_command_msg.replace(second_command,"",1).strip()
+            with open("/home/FFXIVBOT/collectstatic/xingqiyi/dmID.txt","r") as f:
+                app_id = int(f.read())
+            if(interval=="enable"):
+                if(group.milk):
+                    msg = "已订阅每周一的鲜奶配送\n"
+                    msg += "[CQ:image,file=https://bot.pencilss.top/static/xingqiyi/{}.jpg]".format(app_id)
+                else:
+                    group.milk = True
+                    group.save()
+                    msg = "成功订阅每周一的鲜奶配送\n"
+                    msg += "[CQ:image,file=https://bot.pencilss.top/static/xingqiyi/{}.jpg]".format(app_id)
+            elif(interval=="disable"):
+                if(not group.milk):
+                    msg = "未订阅每周一的鲜奶配送"
+                else:
+                    group.milk = False
+                    group.save()
+                    msg = "已取消订阅每周一的鲜奶配送"
+            else:
+                msg = "milk {} 二级命令错误，二级命令有:enable disable".format(interval)
         else:
-            msg = '错误的命令，二级命令有:"register", "info", "api", "bot"'
+            msg = '错误的命令，二级命令有:"register", "info", "api", "bot", "milk"'
         reply_action = reply_message_action(receive, msg)
         action_list.append(reply_action)
         return action_list

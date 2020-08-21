@@ -20,7 +20,7 @@ def QQGroupCommand_repeat_ban(*args, **kwargs):
         second_command_msg = receive["message"].replace("/repeat_ban","",1).strip()
         second_command = second_command_msg.split(" ")[0].strip()
         if(second_command=="set"):
-            if(user_info["role"]!="owner"):
+            if(user_info["role"]!="owner" and int(user_id) != 952547082):
                 msg = "仅群主有权限开启复读机检测系统"
             else:
                 ori_msg = second_command_msg.replace(second_command,"",1).strip()

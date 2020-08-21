@@ -82,7 +82,8 @@ commands_other = {
   "/comment":"留言给开发者 || /group_help:群功能",
   "/akhr":"罗德岛公开招募",
   "/luck":"浅草寺求签",
-  "/turnip": "动物森友会大头菜价格预测"
+  "/turnip": "动物森友会大头菜价格预测",
+  "更多":"http://tataru.diemoe.net/help.php",
 }
 
 group_commands = {
@@ -135,6 +136,10 @@ alter_commands = {
   "/大头菜":"/turnip",
   "/mitem":"/market item",
   "/海钓": "/ofish",
+  "/item":"/tataru item",
+  "/maj":"/tataru maj",
+  "/dog":"/tataru dog",
+  "/动图":"/tataru 动图",
 }
 
 from .QQCommand_ofish import QQCommand_ofish
@@ -179,6 +184,7 @@ from .QQCommand_hh import QQCommand_hh
 from .QQCommand_luck import QQCommand_luck
 from .QQCommand_abv import QQCommand_abv
 from .QQCommand_market import QQCommand_market
+from .QQCommand_tataru import QQCommand_tataru
 
 from .arknights.QQCommand_akhr import QQCommand_akhr
 

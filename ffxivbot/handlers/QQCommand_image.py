@@ -45,20 +45,23 @@ def delete_image(img_hash):
     return sm_req.status_code
 
 def tata_tuku():
-    tata_login = "https://xn--v9x.net/login/"
-    tata_re = requests.get(tata_login)
-    login_csrf =  re.search(r"value=\"(.*)?\"",tata_re.text)[1]
-    payload = {'Email': '952547082@qq.com',
-               'Password': '112233',
-               'csrfmiddlewaretoken': login_csrf}
-    aheaders = {'Content-Type': 'application/x-www-form-urlencoded', 'cookie': 'csrftoken={}'.format(login_csrf), 'refer': 'https://xn--v9x.net/login/'}
-    tata_re = requests.post(url=tata_login, data=payload, headers=aheaders, allow_redirects=False)
-    ck = "{}={};{}={}".format(tata_re.cookies.items()[0][0],tata_re.cookies.items()[0][-1],tata_re.cookies.items()[1][0],tata_re.cookies.items()[1][-1])
-    csrftoken = tata_re.cookies.items()[0][-1]
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tuku.txt"),"w") as l:
-        l.write("{}\n{}\n{}".format(time.strftime("%Y-%m-%d",time.localtime()),csrftoken,ck))
-        l.close()
-    return [csrftoken,ck]
+    try:
+        tata_login = "https://xn--v9x.net/login/"
+        tata_re = requests.get(tata_login)
+        login_csrf =  re.search(r"value=\"(.*)?\"",tata_re.text)[1]
+        payload = {'Email': '952547082@qq.com',
+                   'Password': '112233',
+                   'csrfmiddlewaretoken': login_csrf}
+        aheaders = {'Content-Type': 'application/x-www-form-urlencoded', 'cookie': 'csrftoken={}'.format(login_csrf), 'refer': 'https://xn--v9x.net/login/'}
+        tata_re = requests.post(url=tata_login, data=payload, headers=aheaders, allow_redirects=False, timeout=1)
+        ck = "{}={};{}={}".format(tata_re.cookies.items()[0][0],tata_re.cookies.items()[0][-1],tata_re.cookies.items()[1][0],tata_re.cookies.items()[1][-1])
+        csrftoken = tata_re.cookies.items()[0][-1]
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tuku.txt"),"w") as l:
+            l.write("{}\n{}\n{}".format(time.strftime("%Y-%m-%d",time.localtime()),csrftoken,ck))
+            l.close()
+        return [csrftoken,ck]
+    except:
+        return None
 
 def QQCommand_image(*args, **kwargs):
     action_list = []
@@ -164,9 +167,9 @@ def QQCommand_image(*args, **kwargs):
                         img.delete()
                     msg = '图片"{}"删除完毕'.format(name)
         else:
-            if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "text/tuku.txt")):
+            if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tuku.txt")):
                 g = []
-                with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "text/tuku.txt"),"r") as l:
+                with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tuku.txt"),"r") as l:
                     for line in l.readlines():
                         line = line.strip('\n')
                         g.append(line)
@@ -177,25 +180,25 @@ def QQCommand_image(*args, **kwargs):
                     tata = [g[1],g[2]]
             else:
                 tata = tata_tuku()
-
-            taurl = 'https://xn--v9x.net/image/'
-            category = msg_list[0].strip()
-            get_info = "info" in category
-            j = True
-            category = category.replace("info", "", 1)
-            found = False
+            if tata:
+                taurl = 'https://xn--v9x.net/image/'
+                category = msg_list[0].strip()
+                get_info = "info" in category
+                j = True
+                category = category.replace("info", "", 1)
+                try:
+                    headers = {'X-csrftoken':tata[0],'X-Requested-With':'XMLHttpRequest','Cookie':tata[1],'Referer':'https://xn--v9x.net/image/'}
+                    jdata = json.dumps({
+                                        "optype":"get_images",
+                                        "category":category,
+                                        "cached_images":[]
+                                        })
+                    gr = requests.post(url=taurl,headers=headers,data=jdata,timeout=1)
+                    gimage = gr.json()
+                except:
+                    gimage = {"images":[]}
             tries = 0
-            try:
-                headers = {'X-csrftoken':tata[0],'X-Requested-With':'XMLHttpRequest','Cookie':tata[1],'Referer':'https://xn--v9x.net/image/'}
-                jdata = json.dumps({
-                                    "optype":"get_images",
-                                    "category":category,
-                                    "cached_images":[]
-                                    })
-                gr = requests.post(url=taurl,headers=headers,data=jdata,timeout=5)
-                gimage = gr.json()
-            except:
-                gimage = {"images":[]}
+            found = False
             while not found and tries < 10:
                 tries += 1
                 imgs = Image.objects.filter(key=category)

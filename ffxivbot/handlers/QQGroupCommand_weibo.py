@@ -42,7 +42,10 @@ def QQGroupCommand_weibo(*args, **kwargs):
                 weibo_name = second_command_msg.replace('add','',1).strip()
                 wbus = WeiboUser.objects.filter(name=weibo_name)
                 if(len(wbus)==0):
-                    msg = "未设置 {} 的订阅计划，请联系机器人管理员添加".format(weibo_name)
+                    msg = "未设置 {} 的订阅计划，请联系机器人管理员添加\n当前可订阅:\n".format(weibo_name)
+                    for wu in wblist:
+                        msg += "{}\n".format(wu)
+                    msg = msg.strip()
                 else:
                     wbu = wbus[0]
                     group.subscription.add(wbu)

@@ -220,12 +220,12 @@ def crawl_dps(boss, job, day=0, CN_source=False, dps_type="adps"):
         boss.savage,
         boss.cn_server if CN_source else boss.global_server,
         boss.patch,
-        job.name,
+        job.name.replace(" ",""),
         dps_type
     )
     print("fflogs url:{}".format(fflogs_url))
     s = requests.Session()
-    s.headers.update({'referer': 'https://www.fflogs.com'})
+    s.headers.update({'referer': 'https://www.fflogs.com/zone/statistics/{}/'.format(boss.quest.quest_id)})
     r = s.get(url=fflogs_url, timeout=5)
     tot_days = 0
     percentage_list = [10, 25, 50, 75, 95, 99, 100]
@@ -245,6 +245,8 @@ def crawl_dps(boss, job, day=0, CN_source=False, dps_type="adps"):
         find_res = ptn.findall(r.text)
         if CN_source and boss.cn_offset:
             find_res = find_res[boss.cn_offset:]
+        while ('0', '', '') in find_res:
+            find_res.remove(('0', '', ''))
         # print("found {} atk_res".format(len(find_res)))
         try:
             if day == -1:

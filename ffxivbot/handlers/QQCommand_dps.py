@@ -34,10 +34,9 @@ def QQCommand_dps(*args, **kwargs):
 /dps [Boss] [职业] [数值]\n\
 4.  查询指定天数dps排名\n\
 /dps [Boss] [职业] day#[天数] [数值]\n\
-5.  查询国服dps排名\n\
-/dps ... 国服\n\
 6.  查询rdps\n\
 /dps ... rdps"
+#5.  查询国服dps排名\n\/dps ... 国服\n\
         else:
             for boss in boss_list:
                 try:
@@ -83,7 +82,8 @@ def QQCommand_dps(*args, **kwargs):
                         (int(time.time()) - boss_obj.cn_add_time) / (24 * 3600)
                     )
                     if "CN" in receive_msg or "国服" in receive_msg:
-                        CN_source = True
+                       # CN_source = True
+                        CN_source = False
                         receive_msg = receive_msg.replace("CN", "", 1).replace(
                             "国服", "", 1
                         )

@@ -86,7 +86,7 @@ def QQGroupChat(*args, **kwargs):
             mentions = receive["data"]["payload"].get("mention", [])
             chatting = mentions and mentions[0] == receive["self_wechat_id"]
             print("mentions:{} chatting:{}".format(mentions, chatting))
-        if(chatting and chat_enable):
+        if(chatting and chat_enable and bot.tuling_tokeni!=""):
             user = QQUser.objects.filter(user_id=user_id)
             if user.exists():
                 user = user.first()
@@ -102,7 +102,7 @@ def QQGroupChat(*args, **kwargs):
             tuling_data = {}
             tuling_data["reqType"] = 0 
             tuling_data["perception"] = {"inputText": {"text": receive_msg}}
-            tuling_data["userInfo"] = {"apiKey": TULING_API_KEY if bot.tuling_token=="" else bot.tuling_token,
+            tuling_data["userInfo"] = {"apiKey": bot.tuling_token,
                                          "userId": receive["user_id"] if not wechat else ADMIN_ID, 
                                          "groupId": group.group_id
                                          }
@@ -113,10 +113,6 @@ def QQGroupChat(*args, **kwargs):
             for item in tuling_reply["results"]:
                 if(item["resultType"]=="text"):
                     msg += item["values"]["text"]
-            if bot.tuling_token=="":
-                msg = msg.replace("图灵工程师爸爸", BOT_FATHER)
-                msg = msg.replace("图灵工程师妈妈", BOT_MOTHER)
-                msg = msg.replace("小主人", USER_NICKNAME)
             msg = re.sub(r"(?:http|https):\/\/((?:[\w-]+)(?:\.[\w-]+)+)(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?", "http://ff.sdo.com", msg)
             msg = "[CQ:at,qq=%s] "%(receive["user_id"])+msg
             action = reply_message_action(receive, msg)

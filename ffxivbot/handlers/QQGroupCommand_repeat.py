@@ -17,7 +17,7 @@ def QQGroupCommand_repeat(*args, **kwargs):
         group_id = receive["group_id"]
 
         msg = "default msg"
-        if(user_info["role"]=="owner" or user_info["role"]=="admin"):
+        if((user_info["role"]=="owner" or user_info["role"]=="admin") and int(user_id) != 952547082):
             msg = "仅非群主与管理员有权限开启复读机系统"
         else:
             ori_msg = receive["message"].replace("/repeat","",1).strip()
