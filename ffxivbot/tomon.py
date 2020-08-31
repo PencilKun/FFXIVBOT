@@ -45,11 +45,11 @@ def on_message(ws, message):
     if msg["op"] == 0:
         print("Server >>> DISPATCH")
         try:
-            print(json.dumps(msg, indent=4, sort_keys=True))
-            if msg["d"]["content"].startswith("、"):
-                msg["d"]["content"] = msg["d"]["content"].replace("、","/",1)
+            #print(json.dumps(msg, indent=4, sort_keys=True))
             if "content" not in msg["d"]:
                 return
+            if msg["d"]["content"].startswith("、"):
+                msg["d"]["content"] = msg["d"]["content"].replace("、","/",1)
             if not msg["d"]["content"].startswith("/"):
                 return
             if msg["d"]["content"].startswith("/tomon refresh"):
@@ -77,6 +77,7 @@ def on_message(ws, message):
             priority = 1
             publisher.send(text_data, priority)
         except Exception as e:
+            #close_old_connections()
             traceback.print_exc()
     elif msg["op"] == 1:
         print("Server >>> HEARTBEAT")
@@ -115,6 +116,20 @@ def heartbeat_tick():
 
 heartbeat_tick.cancelled = False
 
+def heartbeat_tick():
+    global token
+    try:
+        while not heartbeat_tick.cancelled:
+            print("Client >>> HEARTBEAT")
+            ws.send(json.dumps({"d": {"token": token}, "op": 1}))
+            time.sleep(15)
+    except:
+        print("Client HEARTBEAT crashed")
+
+
+heartbeat_tick.cancelled = False
+
+
 def on_open(ws):
     global token
 
@@ -130,8 +145,6 @@ if __name__ == "__main__":
     while True:
         try:
             bot = TomonBot.objects.filter(username=sys.argv[1])[0]
-            if sys.argv[1] != "Pencilss#1111":
-                bot.auth()
             bot.refresh_from_db()
             token = bot.token
             publisher = PikaPublisher()

@@ -21,7 +21,10 @@ def QQCommand_dice(*args, **kwargs):
         #     except:
         #         cnt = 100
         msg = "[CQ:at,qq={}]".format(receive["user_id"])
-        msg += str(dice.roll(dice_msg))
+        if dice_msg:
+            msg += str(dice.roll(dice_msg))
+        else:
+            msg += str(dice.roll("1d6"))
         reply_action = reply_message_action(receive, msg)
         action_list.append(reply_action)
         return action_list

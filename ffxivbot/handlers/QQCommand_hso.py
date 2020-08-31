@@ -63,7 +63,7 @@ def QQCommand_hso(*args, **kwargs):
                     r = requests.get(api_url, timeout=(5, 60))
                     img_json = json.loads(r.text)
 
-                    if receive["message_type"] == "group":
+                    if receive["message_type"] != "roup":
                         tmp_list = []
                         for item in img_json:
                             if item["rating"] == "s":
