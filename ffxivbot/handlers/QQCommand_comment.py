@@ -51,6 +51,7 @@ def QQCommand_comment(*args, **kwargs):
             )
             comm.reply = reply_content
             comm.save(update_fields=["reply"])
+            msg = '回复成功'
         elif comment_content != "":
             comment = Comment(
                 left_by=str(user_id),

@@ -83,6 +83,7 @@ commands_other = {
   "/akhr":"罗德岛公开招募",
   "/luck":"浅草寺求签",
   "/turnip": "动物森友会大头菜价格预测",
+  "/tataru": "转发到塔塔露(/tataru ping)",
   "更多":"http://tataru.diemoe.net/help.php",
 }
 
