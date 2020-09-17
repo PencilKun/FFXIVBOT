@@ -577,6 +577,7 @@ class Screen(models.Model):
     name = models.CharField(default="", max_length=64, blank=True)
     nickname = models.TextField(default="{}")
     classname = models.CharField(default="", max_length=64, blank=True)
+    parm_type = models.CharField(default="", max_length=64, blank=True)
 
     def __str__(self):
         return str(self.name)

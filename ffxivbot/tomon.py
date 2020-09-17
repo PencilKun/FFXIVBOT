@@ -73,7 +73,9 @@ def on_message(ws, message):
                 return
             channel_id = msg["d"]["channel_id"]
             group_id = msg["d"]["guild_id"]
-            group = QQGroup.objects.get(group_id=group_id)
+            (group, group_created) = QQGroup.objects.get_or_create(
+                            group_id=group_id
+                        )
             member_list = json.loads(group.member_list)
             member_map = {}
             for m in member_list:
@@ -132,7 +134,8 @@ def heartbeat_tick():
     global token
     try:
         while not heartbeat_tick.cancelled:
-            print("Client >>> HEARTBEAT")
+            print("Client >>> HEARTBEAT MY")
+            bot_heartbeat = TomonBot.objects.get(username=sys.argv[1])
             ws.send(json.dumps({"d": {"token": token}, "op": 1}))
             time.sleep(15)
     except:
@@ -140,20 +143,6 @@ def heartbeat_tick():
 
 
 heartbeat_tick.cancelled = False
-
-def heartbeat_tick():
-    global token
-    try:
-        while not heartbeat_tick.cancelled:
-            print("Client >>> HEARTBEAT")
-            ws.send(json.dumps({"d": {"token": token}, "op": 1}))
-            time.sleep(15)
-    except:
-        print("Client HEARTBEAT crashed")
-
-
-heartbeat_tick.cancelled = False
-
 
 def on_open(ws):
     global token

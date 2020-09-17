@@ -38,7 +38,12 @@ def get_data():
         url = "https://docs.qq.com/dop-api/opendoc?tab=dewveu&id=DY2lCeEpwemZESm5q&outformat=1&normal=1&startrow=0&endrow=60&wb=1&nowb=0"
         r = requests.get(url=url, timeout=10)
         result = r.json()
-        result = result['clientVars']['collab_client_vars']['initialAttributedText']['text'][0][5][0]['c'][1]
+        result = result['clientVars']['collab_client_vars']['initialAttributedText']['text'][0]
+        for temp in result:
+            if isinstance(temp[0]['c'][1],dict):
+                result=temp[0]['c'][1]
+                break
+        #result = result['clientVars']['collab_client_vars']['initialAttributedText']['text'][0][4][0]['c'][1]
         rc = msg.format(result[keyword['week']]['2'][-1])+ \
             "本周主题【{}】\n---\n".format(result[keyword['theme']]['2'][-1])+ \
             "【{}】:\n".format(result[keyword['tag1']]['2'][-1])+ \
