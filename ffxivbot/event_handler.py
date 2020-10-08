@@ -2,6 +2,7 @@ import time
 import json
 from .models import QQGroup, QQBot, QQUser
 from .api_caller import ApiCaller
+from handlers.QQUtils import text2img
 import handlers
 
 
@@ -73,6 +74,10 @@ class EventHandler(object):
                         command_enable = group_commands.get(k, "enable") == "enable"
                     if command_enable:
                         msg += "{}: {}\n".format(k, v)
+                msg = text2img(msg)
+                msg += "具体介绍详见Wiki使用手册: \n{}\n".format(
+                    "https://github.com/Bluefissure/OtterBot/wiki"
+                )
                 msg = msg.strip()
                 self.api_caller.send_message(
                     receive["message_type"],
@@ -173,6 +178,7 @@ class EventHandler(object):
         # Handle /help
         if receive["message"].startswith("/help"):
             msg = ""
+<<<<<<< HEAD
             second_command_msg = receive["message"].replace("/help","",1).strip()
             second_command = second_command_msg.split(" ")[0].strip()
             if (second_command=="img"):
@@ -188,6 +194,20 @@ class EventHandler(object):
                         command_enable = group_commands.get(k, "enable") == "enable"
                     if command_enable:
                         msg += "{}: {}\n".format(k, v)
+=======
+            for (k, v) in handlers.commands.items():
+                command_enable = True  # always True for private
+                if group and group_commands:
+                    command_enable = (
+                        group_commands.get(k, "enable") == "enable"
+                    )  # hide if disabled in group
+                if command_enable:
+                    msg += "{}: {}\n".format(k, v)
+            msg = text2img(msg)
+            msg += "具体介绍详见Wiki使用手册: \n{}\n".format(
+                "https://github.com/Bluefissure/OtterBot/wiki"
+            )
+>>>>>>> 56569439bbf2582f17f2a2615e15339b8a5ac970
             msg = msg.strip()
             self.api_caller.send_message(
                 receive["message_type"],
@@ -347,7 +367,10 @@ class EventHandler(object):
     def on_notice(self, receive, **kwargs):
         print("on_notice:{}".format(json.dumps(receive)))
         bot = self.bot
-        if receive.get("notice_type") == "group_increase":
+        if receive.get("notice_type") == "group_increase" or (
+            receive.get("notice_type") == "group"
+            and receive.get("sub_type") == "increase"
+        ):
             group_id = receive["group_id"]
             user_id = receive["user_id"]
             try:

@@ -124,8 +124,8 @@ class TerritoryAdmin(admin.ModelAdmin):
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ["name", "key"]
-    search_fields = ["name", "key"]
+    list_display = ["name", "key", "add_by"]
+    search_fields = ["name", "key", "add_by__user_id"]
     raw_id_fields = ["add_by"]
 
 
@@ -178,7 +178,7 @@ class TreasureMapAdmin(admin.ModelAdmin):
 
 
 class ScreenAdmin(admin.ModelAdmin):
-    list_display = ("name", "nickname", "classname")
+    list_display = ("name", "id", "nickname", "classname")
     search_fields = ["name", "name"]
 
 
