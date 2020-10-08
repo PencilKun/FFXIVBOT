@@ -79,7 +79,7 @@ def result_to_img(result,glamour_id,bot_version):
     except Exception as e:
         return "Error: {},封面图丢失,请前往原地址查看\nhttps://www.ffxivsc.cn/page/glamour.html?glamourId={}".format(type(e),glamour_id)
 
-def search_jr(job,race,sex,sort,time,bot_version,item_name,item_flag=False):
+def search_jr(job,job_type,race,sex,sort,time,bot_version,item_name,item_flag=False):
     try:
         if item_flag:
             src_url = "https://api.ffxivsc.cn/glamour/v1/librarySearchItem?language=zh&job={}&itemName={}&race={}&sex={}&sort=2&time=0".format(job,item_name,race,sex)
@@ -90,7 +90,7 @@ def search_jr(job,race,sex,sort,time,bot_version,item_name,item_flag=False):
         r = r.json()
         if r["flag"] == 200:
             i = random.randint(0,len(r["array"])-1)
-            glamour_id = r["array"][i]["glamour_id"]
+            glamour_id = r["array"][i]["glamourId"]
             result = search_id(glamour_id)
             img = result_to_img(result,glamour_id,bot_version)
         else:
