@@ -17,7 +17,7 @@ def msg_to_img(msg,n=3):
     text = u"{}".format(msg)
     im = Image.new("RGB", (1300,g),(250,250,250))
     dr = ImageDraw.Draw(im)
-    font = ImageFont.truetype(os.path.join(os.path.dirname(os.path.abspath(__file__)), "arknights/temp/msyh.ttc"), 28)
+    font = ImageFont.truetype(os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources/font/msyh.ttc"), 28)
     dr.text((10, 10), text, font=font, fill="#1B1B1B")
     output_buffer = io.BytesIO()
     im.save(output_buffer, format='JPEG')
@@ -121,10 +121,6 @@ def QQCommand_nuannuan(*args, **kwargs):
         reply_action = reply_message_action(receive, msg)
         action_list.append(reply_action)
     except Exception as e:
-        if "KeyError" in e:
-            msg = "本周时尚品鉴攻略暂未公布"
-        else:
-            msg = "Error: {}".format(type(e))
-        action_list.append(reply_message_action(receive, msg))
+        msg = "Error: {}".format(type(e))
         logging.error(e)
     return action_list

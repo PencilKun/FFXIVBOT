@@ -42,6 +42,7 @@ def QQGroupCommand_weibo(*args, **kwargs):
                 weibo_name = second_command_msg.replace('add','',1).strip()
                 wbus = WeiboUser.objects.filter(name=weibo_name)
                 if(len(wbus)==0):
+                    wblist = WeiboUser.objects.all()
                     msg = "未设置 {} 的订阅计划，请联系机器人管理员添加\n当前可订阅:\n".format(weibo_name)
                     for wu in wblist:
                         msg += "{}\n".format(wu)

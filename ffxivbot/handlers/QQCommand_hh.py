@@ -23,7 +23,7 @@ def search_id(glamour_id):
     try:
         glamour_url = "https://api.ffxivsc.cn/glamour/v1/getGlamourInfo?uid=&glamourId={}".format(glamour_id)
         r = requests.session()
-        r = r.get(glamour_url,timeout=5)
+        r = r.get(glamour_url,timeout=15)
         r = r.json()
         flag = r["flag"]
         result = {}
@@ -111,7 +111,7 @@ def search_jr(job,job_type,race,sex,sort,time,bot_version,item_name,item_flag=Fa
         else:
             src_url = "https://api.ffxivsc.cn/glamour/v1/getLibraryFilterGlamours?job={}&race={}&sex={}&sort={}&time={}&jobType={}&pageNum=1".format(job,race,sex,sort,time,job_type)
         r = requests.session()
-        r = r.get(src_url,timeout=5)
+        r = r.get(src_url,timeout=15)
         r = r.json()
         if r["flag"] == 200:
             i = random.randint(0,len(r["array"])-1)
